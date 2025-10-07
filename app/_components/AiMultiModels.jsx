@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import AiModelList from '@/public/shared/AiModelList'
 import Image from 'next/image'
 import {
@@ -11,17 +11,42 @@ import {
 import { Switch } from '@/components/ui/switch'
 import { MessageSquare } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { AiSelectedModelContext } from '@/context/AiSelectedModelContext'
+import { doc, updateDoc } from 'firebase/firestore'
+import { useUser } from '@clerk/nextjs'
+import {db} from '@/config/FireBaseConfig'
 
 
 function AiMultiModels() {
+  const {user}=useUser()
     const [aiModelList,setAiModeList] = useState(AiModelList)
-
+     const {aiSelectedModels,setAiSelectedModels}= useContext(AiSelectedModelContext)
     const onToggleChange=(model,value)=>{
          setAiModeList((prev)=>
           prev.map((m)=>
         m.model===model?{...m,enable: value}: m)
         )
     }
+
+  const onSelectValue = async(parentModel,value)=>{
+    setAiSelectedModels(prev=>({
+      ...prev,
+      [parentModel]:{
+        modelId:value
+      }
+    }))
+    
+    //update to firebase database
+    const docRef=doc(db,"users",user?.primaryEmailAddress?.emailAddress)
+    await updateDoc(docRef,{
+      selectedModelPref:aiSelectedModels
+    })
+
+  }
+
+
+
+
   return (
     <div className='flex flex-1 h-[75vh] border-b'>
       {aiModelList.map((model, index)=>(
@@ -34,17 +59,24 @@ function AiMultiModels() {
                               width={24} height={24}
                         />
 
-                 {model.enable &&   <Select>
+                 {model.enable &&  (
+                   <Select defaultValue={aiSelectedModels[model.model].modelId}
+                    onValueChange={(value)=>onSelectValue(model.model.value)}
+                    disabled={model.premium}
+                    >
                   <SelectTrigger className="w-[180px]">
-                     <SelectValue placeholder={model.subModel[0].name} />
+                     <SelectValue placeholder={aiSelectedModels[model.model].modelId} />
                   </SelectTrigger>
                 <SelectContent>
-                    {model.subModel.map((subModel,index)=>(
-                            <SelectItem key={index} value={subModel.name}>{subModel.name}</SelectItem>
+                    {model.subModel.map((subModel,i)=> subModel.premium ==false && (
+                            <SelectItem key={i} value={subModel.id}>
+                              {subModel.name}
+                              </SelectItem>
+                    )
 
-                    ))}
+                    )}
                  </SelectContent>
-               </Select> }
+               </Select> )}
         </div>
         <div>
            { model.enable? <Switch checked={model.enable}
