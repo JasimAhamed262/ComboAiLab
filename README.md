@@ -159,21 +159,3 @@ Make sure `suppressHydrationWarning` is added to the `<html>` tag when using the
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-## Acknowledgments
-
-- [Next.js](https://nextjs.org/)
-- [Clerk](https://clerk.com/)
-- [shadcn/ui](https://ui.shadcn.com/)
-- [Tailwind CSS](https://tailwindcss.com/)
-
-## Support
-
-For support, email your-email@example.com or open an issue in the repository.
-
----
-
-Made with ❤️ using Next.js
