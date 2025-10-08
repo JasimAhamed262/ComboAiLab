@@ -1,23 +1,18 @@
-"use client";
+"use client"
 import { Suspense } from "react";
-import { useSearchParams } from "next/navigation";
+import Image from "next/image";
+import { Button } from "@/components/ui/button";
+import { useTheme } from "next-themes";
+import ChatinputBox from "./_components/ChatinputBox";
 
-function HomePageContent() {
-  const searchParams = useSearchParams();
-  const model = searchParams.get("model");
+export default function Home() {
+  const {setTheme} = useTheme();
 
   return (
-    <div>
-      <h1>Welcome to AI Combo</h1>
-      <p>Selected model: {model}</p>
+    <div> 
+      <Suspense fallback={<div>Loading...</div>}>
+        <ChatinputBox/>
+      </Suspense>
     </div>
-  );
-}
-
-export default function HomePage() {
-  return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <HomePageContent />
-    </Suspense>
-  );
+  )
 }
