@@ -22,6 +22,9 @@ function AiMultiModels() {
   const {user}=useUser()
     const [aiModelList,setAiModeList] = useState(AiModelList)
   const {aiSelectedModels,setAiSelectedModels,messages,setMessages} = useContext(AiSelectedModelContext)
+
+
+  
      
     const onToggleChange=(model,value)=>{
          setAiModeList((prev)=>
@@ -115,11 +118,11 @@ function AiMultiModels() {
                 )}
                 <div className='flex gap-3 items-center'>
                 {m.content=='loading' && <><Loader className='animate-spin' /><span>Thinking...</span></>} </div>
-                {m.content!=='loading'&& 
-                <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                      {m.content}
+                {m?.content !=='loading' && 
+                 m?.content&&<ReactMarkdown remarkPlugins={[remarkGfm]}>
+                      {m?.content}
                 </ReactMarkdown>
-}
+                }                     
               </div>
           ))}
         </div>
