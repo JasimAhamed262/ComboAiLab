@@ -1,36 +1,179 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+A modern web application built with React featuring real time chat functionality, authentication, and a beautiful dark/light theme.
+
+## Features
+
+- 💬 Real-time chat interface
+- 🔐 Authentication with Clerk
+- 🌓 Dark/Light theme support
+- ⚡ Built with Next.js 14 App Router
+- 🎨 Styled with Tailwind CSS
+- 🧩 shadcn/ui components
+- 📱 Fully responsive design
+
+## Tech Stack
+
+- **Framework:** React (App Router)
+- **Language:** JavaScript
+- **Styling:** Tailwind CSS
+- **UI Components:** shadcn/ui
+- **Authentication:** Clerk
+- **Theme:** next-themes
+- **Fonts:** Geist Sans & Geist Mono
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
 
+- Node.js 18+ installed
+- npm or yarn package manager
+
+### Installation
+
+1. Clone the repository:
+```bash
+git clone <your-repo-url>
+cd <project-name>
+```
+
+2. Install dependencies:
+```bash
+npm install
+# or
+yarn install
+```
+
+3. Set up environment variables:
+
+Create a `.env.local` file in the root directory:
+
+```env
+# Clerk Authentication
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=your_clerk_publishable_key
+CLERK_SECRET_KEY=your_clerk_secret_key
+
+# Clerk URLs (optional - customize these)
+NEXT_PUBLIC_CLERK_SIGN_IN_URL=/sign-in
+NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-up
+NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL=/
+NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL=/
+```
+
+4. Run the development server:
 ```bash
 npm run dev
 # or
 yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+5. Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+## Project Structure
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+├── app/
+│   ├── _components/      # Reusable components
+│   │   └── ChatinputBox.js
+│   ├── layout.js         # Root layout with providers
+│   ├── page.js           # Home page
+│   ├── provider.js       # Theme provider wrapper
+│   └── globals.css       # Global styles
+├── components/
+│   └── ui/               # shadcn/ui components
+├── public/               # Static assets
+└── package.json
+```
 
-## Learn More
+## Available Scripts
 
-To learn more about Next.js, take a look at the following resources:
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run start` - Start production server
+- `npm run lint` - Run ESLint
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Configuration
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Adding shadcn/ui Components
 
-## Deploy on Vercel
+```bash
+npx shadcn-ui@latest add [component-name]
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Customizing Theme
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Edit `app/globals.css` to customize colors and theme variables.
+
+## Deployment
+
+### Deploy on Vercel
+
+The easiest way to deploy is using [Vercel](https://vercel.com):
+
+1. Push your code to GitHub
+2. Import your repository on Vercel
+3. Add your environment variables
+4. Deploy!
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new)
+
+### Deploy on Other Platforms
+
+This is a standard Next.js app and can be deployed to any platform that supports Node.js:
+
+- Netlify
+- Railway
+- Render
+- AWS Amplify
+
+## Environment Variables
+
+| Variable | Description | Required |
+|----------|-------------|----------|
+| `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` | Clerk publishable key | Yes |
+| `CLERK_SECRET_KEY` | Clerk secret key | Yes |
+| `NEXT_PUBLIC_CLERK_SIGN_IN_URL` | Sign in page URL | No |
+| `NEXT_PUBLIC_CLERK_SIGN_UP_URL` | Sign up page URL | No |
+
+## Troubleshooting
+
+### Build Error: `useSearchParams()` Suspense Boundary
+
+If you encounter this error, wrap components using `useSearchParams()` in a Suspense boundary:
+
+```javascript
+import { Suspense } from 'react'
+
+<Suspense fallback={<div>Loading...</div>}>
+  <YourComponent />
+</Suspense>
+```
+
+### Hydration Errors
+
+Make sure `suppressHydrationWarning` is added to the `<html>` tag when using theme providers.
+
+## Contributing
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## Acknowledgments
+
+- [Next.js](https://nextjs.org/)
+- [Clerk](https://clerk.com/)
+- [shadcn/ui](https://ui.shadcn.com/)
+- [Tailwind CSS](https://tailwindcss.com/)
+
+## Support
+
+For support, email your-email@example.com or open an issue in the repository.
+
+---
+
+Made with ❤️ using Next.js
