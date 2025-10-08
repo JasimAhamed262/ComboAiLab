@@ -5,21 +5,18 @@ import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
 import { AppSidebar } from './_components/AppSidebar'
 import AppHeader from './_components/AppHeader'
 import { useUser } from '@clerk/nextjs'
-import { doc, getDoc,setDoc } from 'firebase/firestore'
+import { doc, getDoc,setDoc, updateDoc } from 'firebase/firestore'
 import { db } from '@/config/FireBaseConfig'
 import { AiSelectedModelContext } from '@/context/AiSelectedModelContext'
 import { DefaultModel } from '@/public/shared/AiModelsShared'
 import { UserDetailContext } from '@/context/UserDetailContext'
 
+function Provider({children,...props}) {
 
-function provider({children,...props}) {
-
-
-   
   const{user}=useUser()
   const[aiSelectedModels,setAiSelectedModels] = useState(DefaultModel)
   const[userDetail,setUserDetail] = useState()
-
+  const[messages,setMessages] = useState({})
 
   useEffect(()=>{
    if(user)
@@ -28,7 +25,18 @@ function provider({children,...props}) {
    }
   },[user])
 
+   useEffect(()=>{
+         if(aiSelectedModels){
+           updateAIModelSelectionPref()
+         }
+   },[aiSelectedModels])
 
+   const updateAIModelSelectionPref= async()=>{
+    const docRef = doc(db,"users",user?.primaryEmailAddress?.emailAddress)
+    await updateDoc(docRef,{
+      selectedModelPref:aiSelectedModels
+    })
+   }
 
   const CreateNewUser =async() =>{
     //if user exitst?
@@ -39,10 +47,10 @@ function provider({children,...props}) {
       {
         console.log('Exisiting User');
         const userInfo=userSnap.data()
-        setAiSelectedModels(userInfo?.selectedModelPref)
+        setAiSelectedModels(userInfo?.selectedModelPref??DefaultModel)
         setUserDetail(userInfo)
           return;
-        
+
       }   else{
         const userData ={
           name:user?.fullName,
@@ -61,10 +69,6 @@ function provider({children,...props}) {
     //if not then insert
   }
 
-
-
-
-
   return (
     <NextThemesProvider   {...props}
        attribute="class"
@@ -72,7 +76,7 @@ function provider({children,...props}) {
        enableSystem
        disableTransitionOnChange>
          <UserDetailContext.Provider value={{userDetail,setUserDetail}}>
-        <AiSelectedModelContext.Provider value={{aiSelectedModels,setAiSelectedModels}}>
+        <AiSelectedModelContext.Provider value={{aiSelectedModels,setAiSelectedModels,messages,setMessages}}>
     <SidebarProvider>
       <AppSidebar/>
       <div className='w-full'>
@@ -84,4 +88,4 @@ function provider({children,...props}) {
   )
 }
 
-export default provider
+export default Provider
