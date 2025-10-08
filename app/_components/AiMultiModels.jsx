@@ -63,9 +63,9 @@ function AiMultiModels() {
   return (
     <div className='flex flex-1 h-[75vh] border-b'>
       {aiModelList.map((model, index)=>(
-        <div className={`flex flex-col border-r h-full overflow-auto 
+        <div key={index} className={`flex flex-col border-r h-full overflow-auto 
         ${model.enable?'flex-1 min-w-[400px]':'w-[100px] flex-none'}`}>
-                <div key={index} className='flex w-full h-[70px] items-center justify-between border-b p-4'>
+                <div className='flex w-full h-[70px] items-center justify-between border-b p-4'>
 
                   <div className='flex items-center gap-4'>
                       <Image src={model.icon} alt={model.model}
@@ -108,6 +108,7 @@ function AiMultiModels() {
       <div className='flex-1 p-4 space-y-2'>
           {messages[model.model]?.map((m,i)=>(
             <div
+            key={i}
             className={`p-2 rounded-md ${m.role=='user'?
               "bg-blue-100 text-blue-900"
               :"bg-gray-100 text-gray-900"

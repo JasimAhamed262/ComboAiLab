@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button'
-import { Mic, Paperclip, Send } from 'lucide-react'
+import { Send } from 'lucide-react'
 import React, {useContext, useState, useEffect} from 'react'
 import AiMultiModels from './AiMultiModels'
 import { AiSelectedModelContext } from '@/context/AiSelectedModelContext'
@@ -184,14 +184,10 @@ function ChatinputBox() {
             onKeyDown={(e) => e.key === 'Enter' && handleSend()}
           />
 
-          <div className='mt-3 flex justify-between items-center'>
-            <Button className={''} variant={'ghost'} size={'icon'}>
-              <Paperclip className='h-5 w-5'/>
+          <div className='mt-3 flex justify-end items-center'>
+            <Button size={'icon'} onClick={handleSend}>
+              <Send/>
             </Button>
-            <div className='flex gap-5'>
-              <Button variant={'ghost'} size={'icon'}><Mic/></Button>
-              <Button size={'icon'} onClick={handleSend}><Send/></Button>
-            </div>
           </div>
         </div>
       </div>
