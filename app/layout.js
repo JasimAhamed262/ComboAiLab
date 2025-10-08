@@ -14,8 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: "AiComboLab"
-  description: "AiCombinations App", /
+  title: "AiComboLab",
+  description: "AiCombinations App" ,
 };
 
 export default function RootLayout({ children }) {
