@@ -4,10 +4,32 @@ import React, {useContext, useState, useEffect} from 'react'
 import AiMultiModels from './AiMultiModels'
 import { AiSelectedModelContext } from '@/context/AiSelectedModelContext'
 import axios from 'axios'
+import { v4 as uuidv4 } from 'uuid';
+import { doc, getDoc, setDoc } from 'firebase/firestore'
+import { db } from '@/config/FireBaseConfig'
+import { useUser } from '@clerk/nextjs'
+import { useSearchParams } from 'next/navigation'
+
 
 function ChatinputBox() {
   const [userInput, setUserInput] = useState('')
   const {aiSelectedModels, setAiSelectedModels, messages, setMessages} = useContext(AiSelectedModelContext)
+  const {user}=useUser()
+  const [chatId,setChatId] =useState()
+  const params = useSearchParams()
+
+  useEffect(()=>{
+    const chatId_= params.get('chatId')
+    if(chatId_){
+      setChatId(chatId_)
+      GetMessages(chatId_)
+    }
+    else{
+      setMessages([])
+      setChatId(uuidv4())
+    }
+},[params])
+
  
   const handleSend = async () => {
     if (!userInput.trim()) return;
@@ -115,11 +137,37 @@ function ChatinputBox() {
   };
 
   useEffect(() => {
-    console.log(messages)
+      if(messages){
+        SaveMessages()
+      }
+
   }, [messages])
 
+   const SaveMessages=async()=>{
+       const docRef=doc(db,'chatHistory',chatId)
+
+       await setDoc(docRef,{
+        chatId:chatId,
+        userEmail:user?.primaryEmailAddress?.emailAddress,
+        messages:messages,
+        lastUpdated: Date.now()
+       })
+   }
+
+  const GetMessages = async (chatId) => {
+  const docRef = doc(db, 'chatHistory', chatId);
+  const docSnap = await getDoc(docRef);
+  console.log(docSnap.data());
+  const docData = docSnap.data();
+  setMessages(docData.messages);
+}
+      
+  
+
+
+
   return (
-    <div className='relative min-h-screen'>
+    <div className='relative min-h-[80vh] mt-[60px]'>
       {/* Page Content */}
       <div>
         <AiMultiModels/> 
